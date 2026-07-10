@@ -3443,21 +3443,33 @@ class AboutScreen extends StatelessWidget {
       children: [
         const Header(
           title: 'Acerca de',
-          subtitle: 'Osi y Ra acompanando la operacion de SchoolBite.',
+          subtitle: 'Identidad oficial de la Demo Comercial SchoolBite.',
         ),
-        const Row(
-          children: [
-            MascotMini(mascot: Mascot.osi),
-            SizedBox(width: 14),
-            MascotMini(mascot: Mascot.ra),
-          ],
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              children: [
+                Image.asset(BrandAssets.logo, height: 150, fit: BoxFit.contain),
+                const SizedBox(height: 18),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    MascotMini(mascot: Mascot.osi, size: 108),
+                    SizedBox(width: 18),
+                    MascotMini(mascot: Mascot.ra, size: 108),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
         const SizedBox(height: 18),
         const Card(
           child: ListTile(
             leading: Icon(Icons.lunch_dining),
             title: Text('SchoolBite'),
-            subtitle: Text('Version Demo'),
+            subtitle: Text('Version Demo Comercial'),
           ),
         ),
         const Card(
@@ -3599,11 +3611,8 @@ class MascotMini extends StatelessWidget {
       ),
       child: ClipOval(
         child: Image.asset(
-          isOsi ? BrandAssets.osiDelivery : BrandAssets.raCooking,
+          isOsi ? BrandAssets.osiThumb : BrandAssets.raThumb,
           fit: BoxFit.cover,
-          alignment: isOsi
-              ? const Alignment(-0.35, -0.2)
-              : const Alignment(0.55, -0.05),
         ),
       ),
     );
@@ -3642,27 +3651,11 @@ class Brand extends StatelessWidget {
   const Brand({super.key, this.compact = false});
   final bool compact;
   @override
-  Widget build(BuildContext context) => Row(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      Container(
-        width: 34,
-        height: 34,
-        decoration: BoxDecoration(
-          color: const Color(0xFF052E2B),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: const Icon(
-          Icons.lunch_dining,
-          color: Color(0xFFFFC857),
-          size: 20,
-        ),
-      ),
-      if (!compact) ...[
-        const SizedBox(width: 10),
-        const Text('SchoolBite', style: TextStyle(fontWeight: FontWeight.w900)),
-      ],
-    ],
+  Widget build(BuildContext context) => Image.asset(
+    BrandAssets.logo,
+    height: compact ? 40 : 56,
+    width: compact ? 40 : null,
+    fit: BoxFit.contain,
   );
 }
 
@@ -3774,14 +3767,13 @@ class EmptyState extends StatelessWidget {
       padding: const EdgeInsets.all(28),
       child: Column(
         children: [
-          Container(
-            width: 76,
-            height: 76,
-            decoration: const BoxDecoration(
-              color: Color(0xFFFFF7DB),
-              shape: BoxShape.circle,
+          ClipOval(
+            child: Image.asset(
+              BrandAssets.raThumb,
+              width: 82,
+              height: 82,
+              fit: BoxFit.cover,
             ),
-            child: const Icon(Icons.inbox, color: Color(0xFFF59E0B), size: 36),
           ),
           const SizedBox(height: 14),
           Text(

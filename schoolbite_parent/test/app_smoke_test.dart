@@ -9,7 +9,6 @@ void main() {
 
     await tester.pump(const Duration(seconds: 3));
     await tester.pumpAndSettle();
-    expect(find.text('SchoolBite'), findsWidgets);
     expect(find.text('Entrar a la app'), findsOneWidget);
   });
 }

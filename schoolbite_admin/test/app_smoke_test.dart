@@ -6,7 +6,6 @@ void main() {
     await tester.pumpWidget(const SchoolBiteAdminApp());
     await tester.pump();
 
-    expect(find.text('SchoolBite'), findsWidgets);
     expect(find.text('Entrar como Administrador'), findsOneWidget);
     expect(find.text('Entrar como Operacion'), findsOneWidget);
   });

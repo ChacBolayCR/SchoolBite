@@ -98,28 +98,8 @@ class BrandMark extends StatelessWidget {
   const BrandMark({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 34,
-          height: 34,
-          decoration: BoxDecoration(
-            color: const Color(0xFF052E2B),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: const Icon(
-            Icons.lunch_dining,
-            color: Color(0xFFFFC857),
-            size: 20,
-          ),
-        ),
-        const SizedBox(width: 10),
-        const Text('SchoolBite', style: TextStyle(fontWeight: FontWeight.w800)),
-      ],
-    );
-  }
+  Widget build(BuildContext context) =>
+      Image.asset(BrandAssets.logo, height: 48, fit: BoxFit.contain);
 }
 
 class HeroSection extends StatelessWidget {
@@ -426,18 +406,13 @@ class WhySodasChoose extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          for (final item in items)
+          for (var index = 0; index < items.length; index++)
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(
-                    Icons.check_circle,
-                    color: Color(0xFF10B981),
-                    size: 18,
-                  ),
-                  const SizedBox(width: 8),
+                  BenefitMarker(index: index),
                   Expanded(
                     child: RichText(
                       text: TextSpan(
@@ -447,13 +422,13 @@ class WhySodasChoose extends StatelessWidget {
                         ),
                         children: [
                           TextSpan(
-                            text: '${item.$1}\n',
+                            text: '${items[index].$1}\n',
                             style: const TextStyle(
                               color: Color(0xFF082F49),
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          TextSpan(text: item.$2),
+                          TextSpan(text: items[index].$2),
                         ],
                       ),
                     ),
@@ -462,6 +437,32 @@ class WhySodasChoose extends StatelessWidget {
               ),
             ),
         ],
+      ),
+    );
+  }
+}
+
+class BenefitMarker extends StatelessWidget {
+  const BenefitMarker({super.key, required this.index});
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    final asset = index == 2
+        ? BrandAssets.raThumb
+        : (index == 0 || index == 3)
+        ? BrandAssets.osiThumb
+        : null;
+    if (asset == null) {
+      return const Padding(
+        padding: EdgeInsets.only(right: 8, top: 2),
+        child: Icon(Icons.check_circle, color: Color(0xFF10B981), size: 18),
+      );
+    }
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: ClipOval(
+        child: Image.asset(asset, width: 26, height: 26, fit: BoxFit.cover),
       ),
     );
   }

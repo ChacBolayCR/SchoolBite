@@ -777,7 +777,13 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 6),
-              Text(childMessage, style: TextStyle(color: Color(0xFF64748B))),
+              const SizedBox(height: 10),
+              MascotNote(
+                asset: validationCount > 0
+                    ? BrandAssets.raThumb
+                    : BrandAssets.osiThumb,
+                text: childMessage,
+              ),
               const SizedBox(height: 18),
               PaymentFamilyStatus(
                 pending: pendingCount,
@@ -907,16 +913,16 @@ class PaymentFamilyStatus extends StatelessWidget {
         : validation > 0
         ? const Color(0xFFF59E0B)
         : const Color(0xFF10B981);
-    final icon = pending > 0
-        ? Icons.error
-        : validation > 0
-        ? Icons.hourglass_top
-        : Icons.check_circle;
     final text = pending > 0
         ? 'Hay pagos pendientes.'
         : validation > 0
-        ? 'Hay pedidos pendientes de validar.'
-        : 'Todos los pedidos del dia estan confirmados.';
+        ? 'Pedido confirmado. Ra validara el comprobante pronto.'
+        : 'Todo listo. Osi tiene los pedidos bajo control.';
+    final asset = pending > 0
+        ? BrandAssets.osiThumb
+        : validation > 0
+        ? BrandAssets.raThumb
+        : BrandAssets.osiThumb;
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -925,7 +931,7 @@ class PaymentFamilyStatus extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, color: color),
+          BrandAvatar(asset: asset, size: 38),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
@@ -1052,6 +1058,40 @@ void showChildForm(BuildContext context, {Child? child}) {
         );
       },
     ),
+  );
+}
+
+class MascotNote extends StatelessWidget {
+  const MascotNote({super.key, required this.asset, required this.text});
+  final String asset;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Row(
+    children: [
+      BrandAvatar(asset: asset, size: 42),
+      const SizedBox(width: 10),
+      Expanded(
+        child: Text(
+          text,
+          style: const TextStyle(
+            color: Color(0xFF64748B),
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
+class BrandAvatar extends StatelessWidget {
+  const BrandAvatar({super.key, required this.asset, this.size = 48});
+  final String asset;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) => ClipOval(
+    child: Image.asset(asset, width: size, height: size, fit: BoxFit.cover),
   );
 }
 
@@ -1474,22 +1514,19 @@ void showOrderConfirmation(BuildContext context, Order order) {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 82,
-              height: 82,
-              decoration: const BoxDecoration(
-                color: Color(0xFFE8FFF4),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.check_rounded,
-                color: Color(0xFF10B981),
-                size: 48,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: Image.asset(
+                BrandAssets.osiDelivery,
+                width: 180,
+                height: 150,
+                fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
               ),
             ),
             const SizedBox(height: 18),
             const Text(
-              'Pedido confirmado',
+              '¡Perfecto!\n\nTu pedido fue registrado correctamente.',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
             ),
@@ -1735,9 +1772,11 @@ Future<void> showSinpeReceiptDialog(BuildContext context, Order order) async {
     builder: (dialogContext) => StatefulBuilder(
       builder: (dialogContext, setDialogState) {
         Future<void> pick(ImageSource source) async {
-          await ImagePicker().pickImage(source: source);
+          final receipt = await ImagePicker().pickImage(source: source);
           if (dialogContext.mounted) Navigator.pop(dialogContext);
-          if (context.mounted) showOrderConfirmation(context, order);
+          if (context.mounted && receipt != null) {
+            showSinpeSuccessDialog(context, order);
+          }
         }
 
         return AlertDialog(
@@ -1794,6 +1833,45 @@ Future<void> showSinpeReceiptDialog(BuildContext context, Order order) async {
           ],
         );
       },
+    ),
+  );
+}
+
+void showSinpeSuccessDialog(BuildContext context, Order order) {
+  showDialog(
+    context: context,
+    builder: (dialogContext) => AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(24),
+            child: Image.asset(
+              BrandAssets.raCooking,
+              width: 190,
+              height: 160,
+              fit: BoxFit.cover,
+              alignment: Alignment.topCenter,
+            ),
+          ),
+          const SizedBox(height: 18),
+          const Text(
+            '¡Excelente!\n\nRecibimos tu comprobante.\n\nLa soda lo validará en pocos minutos.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+          ),
+        ],
+      ),
+      actions: [
+        FilledButton(
+          onPressed: () {
+            Navigator.pop(dialogContext);
+            showOrderConfirmation(context, order);
+          },
+          child: const Text('Entendido'),
+        ),
+      ],
     ),
   );
 }
@@ -1916,25 +1994,21 @@ class PagePad extends StatelessWidget {
 class Brand extends StatelessWidget {
   const Brand({super.key});
   @override
-  Widget build(BuildContext context) => Row(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      Container(
-        width: 34,
-        height: 34,
-        decoration: BoxDecoration(
-          color: const Color(0xFF052E2B),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: const Icon(
-          Icons.lunch_dining,
-          color: Color(0xFFFFC857),
-          size: 20,
-        ),
-      ),
-      const SizedBox(width: 10),
-      const Text('SchoolBite', style: TextStyle(fontWeight: FontWeight.w900)),
-    ],
+  Widget build(BuildContext context) =>
+      Image.asset(BrandAssets.logo, height: 42, fit: BoxFit.contain);
+}
+
+class EmptyMascot extends StatelessWidget {
+  const EmptyMascot({super.key});
+
+  @override
+  Widget build(BuildContext context) => ClipOval(
+    child: Image.asset(
+      BrandAssets.raThumb,
+      width: 82,
+      height: 82,
+      fit: BoxFit.cover,
+    ),
   );
 }
 
@@ -1999,19 +2073,7 @@ class EmptyState extends StatelessWidget {
       padding: const EdgeInsets.all(28),
       child: Column(
         children: [
-          Container(
-            width: 74,
-            height: 74,
-            decoration: const BoxDecoration(
-              color: Color(0xFFE8FFF4),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.receipt_long,
-              color: Color(0xFF10B981),
-              size: 34,
-            ),
-          ),
+          const EmptyMascot(),
           const SizedBox(height: 14),
           Text(
             text,

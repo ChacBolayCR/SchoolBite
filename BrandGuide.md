@@ -1,7 +1,24 @@
 # SchoolBite Brand Guide
 
-SchoolBite usa a Osi y Ra como identidad visual oficial. La ilustracion fuente
-es `schoolbite_osi_ra_official.png` y debe tratarse como referencia canonica.
+Sprint RC2 congela el branding oficial de SchoolBite antes del despliegue en
+Vercel. Osi y Ra son las unicas mascotas oficiales del producto.
+
+## Assets Oficiales
+
+Los archivos oficiales son:
+
+```text
+logo_schoolbite.png
+osi.png
+ra.png
+osi_delivery.png
+ra_cooking.png
+osi_thumb.png
+ra_thumb.png
+```
+
+No se deben reinterpretar, recrear con IA, recolorear ni cambiar expresiones.
+Todas las referencias de UI deben pasar por `BrandAssets`.
 
 ## Personalidad de Osi
 
@@ -11,8 +28,8 @@ huella. Representa pedidos, entregas y acompanamiento a las familias.
 - Alegre, servicial y cercano.
 - Transmite rapidez, orden y confianza.
 - Puede aparecer en pedidos, entregas, confirmaciones y estados positivos.
-- Frases sugeridas: "Tu pedido esta en buenas patas", "Todo listo para
-  entregar" y "Gracias por usar SchoolBite".
+- Frases sugeridas: "Tu pedido esta en buenas patas", "Todo listo" y "Gracias
+  por usar SchoolBite".
 
 ## Personalidad de Ra
 
@@ -22,9 +39,9 @@ preparacion y cuidado en los alimentos.
 
 - Tranquilo, amable y cuidadoso.
 - Transmite calidad, calma y cocina organizada.
-- Puede aparecer en produccion, cocina, menus y bienvenida.
+- Puede aparecer en produccion, cocina, menus y validaciones SINPE.
 - Frases sugeridas: "Cocinamos con amor para ti", "Hoy cocinaremos algo
-  delicioso" y "Nos vemos manana".
+  delicioso" y "La soda lo validara en pocos minutos".
 
 ## Colores oficiales
 
@@ -46,46 +63,37 @@ Las apps Flutter usan la tipografia del sistema con Material 3.
 - Texto operativo: peso 600-700 cuando requiere escaneo rapido.
 - Texto secundario: color `#64748B` y tamanos moderados.
 
-Cuando se agregue una fuente de marca, debe conectarse desde el theme central y
-no desde widgets individuales.
+## Reglas de uso
 
-## Reglas de uso de las mascotas
-
-- No generar nuevas mascotas ni reinterpretar el estilo.
 - No usar personajes alternativos.
+- No usar iconos temporales como sustitutos de Osi, Ra o el logo.
 - Osi siempre es el encargado de pedidos y entregas.
 - Ra siempre es el encargado de cocina.
 - Ra siempre debe mantener ojo izquierdo azul y ojo derecho amarillo.
-- No deformar, estirar ni recolorear las mascotas.
-- No usar el poster completo como icono, avatar o miniatura operativa.
-- `osi.png`, `ra.png`, `osi_splash.png`, `ra_splash.png`,
-  `osi_delivery.png` y `ra_cooking.png` deben ser recortes limpios de mascota.
-- Usar las mascotas en splash, landing, about, empty states, loading y mensajes
-  amigables.
-- No abusar de mensajes de mascota en pantallas operativas.
+- No deformar, estirar, recortar agresivamente ni recolorear las ilustraciones.
+- No usar posters antiguos ni composiciones temporales como iconos.
+- Usar `osi_thumb.png` y `ra_thumb.png` para tamanos pequenos.
+- Usar `osi_delivery.png` para confirmaciones de pedido o entrega.
+- Usar `ra_cooking.png` para cocina, SINPE y mensajes de validacion.
+- Usar `logo_schoolbite.png` para favicon, PWA, manifest, app icon y marca.
 
-## Organizacion de assets
+## Organizacion
 
 Cada proyecto mantiene su propia carpeta:
 
 ```text
 assets/branding/
-  schoolbite_osi_ra_official.png
+  logo_schoolbite.png
   osi.png
   ra.png
-  osi_splash.png
-  ra_splash.png
   osi_delivery.png
   ra_cooking.png
-  logo_schoolbite.png
+  osi_thumb.png
+  ra_thumb.png
 ```
 
-Todas las referencias de UI deben pasar por `BrandAssets`, ubicado en:
+El punto unico de referencia es:
 
 ```text
 lib/branding/brand_assets.dart
 ```
-
-Los recortes actuales salen de la ilustracion oficial. Cuando existan exports
-definitivos, reemplazar archivos conservando los mismos nombres para no tocar
-widgets ni logica.
