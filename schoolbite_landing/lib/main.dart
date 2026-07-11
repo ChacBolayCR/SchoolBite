@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:schoolbite_landing/branding/brand_assets.dart';
-import 'package:schoolbite_landing/config/demo_links_config.dart';
+import 'package:schoolbite_landing/config/commercial_config.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(const SchoolBiteLanding());
@@ -170,16 +170,19 @@ class HeroSection extends StatelessWidget {
                     runSpacing: 12,
                     children: const [
                       CtaButton(
-                        label: 'Probar Demo',
+                        label: 'Probar demo para padres',
                         icon: Icons.play_arrow_rounded,
-                        url: DemoLinksConfig.parentDemoUrl,
+                        url: CommercialConfig.parentDemoUrl,
                       ),
                       CtaButton(
-                        label: 'Probar como soda',
+                        label: 'Probar panel de soda',
                         icon: Icons.dashboard_customize,
-                        url: DemoLinksConfig.adminDemoUrl,
+                        url: CommercialConfig.adminDemoUrl,
                       ),
-                      GhostButton(label: 'Solicitar piloto'),
+                      GhostButton(
+                        label: 'Solicitar piloto',
+                        url: CommercialConfig.contactUrl,
+                      ),
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -723,29 +726,129 @@ class PricingSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Section(
-      title: 'Planes para pilotos',
-      subtitle: 'Listos para validar precio durante pilotos comerciales.',
-      child: ResponsiveGrid(
-        children: const [
-          PriceCard(
-            name: 'Piloto',
-            price: 'CRC 0',
-            body: 'Demo guiado para una soda y menu basico.',
-          ),
-          PriceCard(
-            name: 'Soda Pro',
-            price: 'CRC 0',
-            body: 'Pedidos, dashboard, menu diario y reportes simples.',
-          ),
-          PriceCard(
-            name: 'Escuela',
-            price: 'A medida',
-            body: 'Multi-soda, permisos y configuracion institucional.',
-          ),
-        ],
+      title: 'Un plan sencillo. Todo SchoolBite incluido.',
+      child: InfoCard(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final wide = constraints.maxWidth > 760;
+            const summary = PricingSummary();
+            const features = PricingFeatures();
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (wide)
+                  const Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(flex: 4, child: summary),
+                      SizedBox(width: 28),
+                      Expanded(flex: 5, child: features),
+                    ],
+                  )
+                else
+                  const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [summary, SizedBox(height: 22), features],
+                  ),
+                const SizedBox(height: 24),
+                Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: const [
+                    GhostButton(
+                      label: 'Solicitar piloto',
+                      url: CommercialConfig.contactUrl,
+                    ),
+                    Text(
+                      '¿Administra varias sodas? Solicite una cotizacion multisede.',
+                      style: TextStyle(
+                        color: Color(0xFF047857),
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                const Text(
+                  'Precio introductorio sujeto a condiciones del piloto y alcance contratado.',
+                  style: TextStyle(color: Color(0xFF94A3B8), fontSize: 13),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
+}
+
+class PricingFeatures extends StatelessWidget {
+  const PricingFeatures({super.key});
+
+  static const items = [
+    'Aplicacion para padres',
+    'Pedidos y estudiantes',
+    'Produccion agrupada',
+    'Entregas por seccion',
+    'Control de pagos',
+    'Menu diario y mensual',
+    'Pedidos directos en soda',
+    'Actualizaciones',
+    'Soporte',
+  ];
+
+  @override
+  Widget build(BuildContext context) => Wrap(
+    spacing: 10,
+    runSpacing: 10,
+    children: [
+      for (final item in items)
+        Chip(
+          avatar: const Icon(Icons.check_circle, size: 18),
+          label: Text(item),
+          backgroundColor: const Color(0xFFE8FFF4),
+          side: BorderSide.none,
+          labelStyle: const TextStyle(
+            color: Color(0xFF064E3B),
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+    ],
+  );
+}
+
+class PricingSummary extends StatelessWidget {
+  const PricingSummary({super.key});
+
+  @override
+  Widget build(BuildContext context) => const Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        'SchoolBite Pro',
+        style: TextStyle(
+          color: Color(0xFF082F49),
+          fontSize: 28,
+          fontWeight: FontWeight.w900,
+        ),
+      ),
+      SizedBox(height: 10),
+      Text(
+        '${CommercialConfig.monthlyPrice} / mes por soda',
+        style: TextStyle(
+          color: Color(0xFF052E2B),
+          fontSize: 34,
+          fontWeight: FontWeight.w900,
+        ),
+      ),
+      SizedBox(height: 8),
+      Text(
+        'Sin cobro por pedido o estudiante.',
+        style: TextStyle(color: Color(0xFF64748B), fontWeight: FontWeight.w800),
+      ),
+    ],
+  );
 }
 
 class FaqSection extends StatelessWidget {
@@ -758,19 +861,44 @@ class FaqSection extends StatelessWidget {
       child: Column(
         children: const [
           FaqItem(
-            question: 'Tiene pagos reales?',
+            question: '¿SchoolBite sustituye WhatsApp?',
             answer:
-                'No en Sprint 1. El demo muestra estados de pago para vender el flujo antes de integrar SINPE o tarjetas.',
+                'Si. Los padres pueden consultar el menu, realizar pedidos, indicar personalizaciones y seleccionar el metodo de pago desde una sola plataforma.',
           ),
           FaqItem(
-            question: 'Funciona en celular?',
+            question: '¿Los padres deben instalar una aplicacion?',
             answer:
-                'La app de padres corre en Web y Android. El panel de soda esta pensado para desktop y tablet.',
+                'Pueden utilizar la version web desde su celular. La aplicacion movil tambien esta preparada para Android.',
           ),
           FaqItem(
-            question: 'Se puede adaptar a mi escuela?',
+            question: '¿Como funcionan los pagos?',
             answer:
-                'La arquitectura ya piensa en escuelas, sodas, usuarios, hijos, menus y pedidos multi-tenant.',
+                'SchoolBite permite registrar tarjeta, SINPE Movil o pago directo en la soda. Los comprobantes SINPE pueden ser revisados por el personal de la soda.',
+          ),
+          FaqItem(
+            question: '¿Se puede utilizar en mas de una escuela?',
+            answer:
+                'La arquitectura esta preparada para que una empresa administre distintas sodas con informacion y codigos independientes.',
+          ),
+          FaqItem(
+            question: '¿Se puede cargar el menu mensual?',
+            answer:
+                'Si. El administrador puede importar un archivo Excel con fechas, opciones, precios y personalizaciones.',
+          ),
+          FaqItem(
+            question: '¿Que ocurre con alergias o restricciones alimenticias?',
+            answer:
+                'Las restricciones se registran por estudiante y aparecen destacadas en pedidos, produccion y entregas.',
+          ),
+          FaqItem(
+            question: '¿Incluye facturacion electronica?',
+            answer:
+                'La version actual centraliza pedidos, ventas y pagos. La integracion formal con facturacion electronica forma parte del roadmap.',
+          ),
+          FaqItem(
+            question: '¿Existe un periodo de prueba?',
+            answer:
+                'Las primeras sodas podran participar en un piloto acompanado para validar SchoolBite en su operacion diaria.',
           ),
         ],
       ),
@@ -806,6 +934,7 @@ class FinalCtaSection extends StatelessWidget {
             const CtaButton(
               label: 'Solicitar piloto',
               icon: Icons.rocket_launch,
+              url: CommercialConfig.contactUrl,
             ),
             const SizedBox(height: 10),
             const Text(
@@ -1269,12 +1398,13 @@ Future<void> openDemoUrl(String url) async {
 }
 
 class GhostButton extends StatelessWidget {
-  const GhostButton({super.key, required this.label});
+  const GhostButton({super.key, required this.label, this.url});
   final String label;
+  final String? url;
 
   @override
   Widget build(BuildContext context) => OutlinedButton(
-    onPressed: () {},
+    onPressed: url == null ? () {} : () => openDemoUrl(url!),
     style: OutlinedButton.styleFrom(
       padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 16),
       foregroundColor: const Color(0xFF052E2B),

@@ -54,9 +54,10 @@ flutter build web --release
 
 Luego servir nuevamente cada carpeta `build/web` o refrescar el navegador con cache limpia. El admin usa la llave mock `schoolbite.orders.v2` para evitar cargar datos personales de pruebas anteriores.
 
-## URLs de demo en landing
+## Configuracion comercial en landing
 
-La landing usa `DemoLinksConfig` en `schoolbite_landing/lib/config/demo_links_config.dart`.
+La landing usa `CommercialConfig` en
+`schoolbite_landing/lib/config/commercial_config.dart`.
 
 Valores locales por defecto:
 
@@ -67,8 +68,8 @@ Para Vercel se pueden cambiar al compilar con `--dart-define`:
 
 ```bash
 flutter build web --release \
-  --dart-define=SCHOOLBITE_PARENT_DEMO_URL=https://schoolbite-parent.vercel.app \
-  --dart-define=SCHOOLBITE_ADMIN_DEMO_URL=https://schoolbite-admin.vercel.app
+  --dart-define=PARENT_DEMO_URL=https://schoolbite-parent.vercel.app \
+  --dart-define=ADMIN_DEMO_URL=https://schoolbite-admin.vercel.app
 ```
 
 ## Correr localmente
@@ -98,19 +99,49 @@ flutter build apk --release
 
 ## Deploy en Vercel
 
-Crear un proyecto de Vercel por carpeta.
+El repositorio es un monorepo. Crear tres proyectos Vercel desde:
 
-Build command:
+```text
+https://github.com/ChacBolayCR/SchoolBite
+```
+
+Orden recomendado de despliegue:
+
+1. SchoolBite Parent
+2. SchoolBite Admin
+3. SchoolBite Landing
+
+Configuracion por proyecto:
+
+| Proyecto Vercel | Root Directory | Build Command | Output Directory |
+| --- | --- | --- | --- |
+| SchoolBite Parent | `schoolbite_parent` | `bash vercel_build.sh` | `build/web` |
+| SchoolBite Admin | `schoolbite_admin` | `bash vercel_build.sh` | `build/web` |
+| SchoolBite Landing | `schoolbite_landing` | `bash vercel_build.sh` | `build/web` |
+
+Cada carpeta incluye su propio `vercel.json` con rewrite a `index.html` para
+rutas Flutter Web.
+
+Los scripts descargan Flutter `3.32.7` en cache de Vercel y ejecutan:
 
 ```bash
+flutter config --enable-web
+flutter pub get
 flutter build web --release
 ```
 
-Output directory:
+Variables de entorno requeridas en SchoolBite Landing:
 
-```bash
-build/web
+```text
+PARENT_DEMO_URL=https://schoolbite-parent.vercel.app
+ADMIN_DEMO_URL=https://schoolbite-admin.vercel.app
 ```
+
+Variables comerciales opcionales:
+
+- `CONTACT_EMAIL`
+- `WHATSAPP_URL`
+- `MONTHLY_PRICE`
 
 ## Sprint 2 sugerido
 

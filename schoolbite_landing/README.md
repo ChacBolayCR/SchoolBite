@@ -22,37 +22,63 @@ flutter run -d chrome
 flutter build web --release
 ```
 
-## URLs de demo
+## Configuracion comercial
 
-Los botones "Probar como padre" y "Probar como soda" leen sus URLs desde:
+Los botones "Probar demo para padres" y "Probar panel de soda" leen sus URLs
+desde:
 
 ```text
-lib/config/demo_links_config.dart
+lib/config/commercial_config.dart
 ```
 
 Valores locales:
 
-- `parentDemoUrl`: `http://127.0.0.1:8102`
-- `adminDemoUrl`: `http://127.0.0.1:8103`
+- `PARENT_DEMO_URL`: `http://127.0.0.1:8102`
+- `ADMIN_DEMO_URL`: `http://127.0.0.1:8103`
 
 Para cambiar a Vercel sin tocar widgets:
 
 ```bash
 flutter build web --release \
-  --dart-define=SCHOOLBITE_PARENT_DEMO_URL=https://schoolbite-parent.vercel.app \
-  --dart-define=SCHOOLBITE_ADMIN_DEMO_URL=https://schoolbite-admin.vercel.app
+  --dart-define=PARENT_DEMO_URL=https://schoolbite-parent.vercel.app \
+  --dart-define=ADMIN_DEMO_URL=https://schoolbite-admin.vercel.app
 ```
+
+Variables opcionales:
+
+- `CONTACT_EMAIL`
+- `WHATSAPP_URL`
+- `MONTHLY_PRICE`
 
 ## Vercel
 
-Build command:
+Root Directory:
 
-```bash
-flutter build web --release --dart-define=SCHOOLBITE_PARENT_DEMO_URL=https://schoolbite-parent.vercel.app --dart-define=SCHOOLBITE_ADMIN_DEMO_URL=https://schoolbite-admin.vercel.app
+```text
+schoolbite_landing
 ```
 
-Output directory:
+Build Command:
+
+```bash
+bash vercel_build.sh
+```
+
+Output Directory:
 
 ```bash
 build/web
 ```
+
+Variables de entorno recomendadas:
+
+```text
+PARENT_DEMO_URL=https://schoolbite-parent.vercel.app
+ADMIN_DEMO_URL=https://schoolbite-admin.vercel.app
+WHATSAPP_URL=https://wa.me/50600000000
+CONTACT_EMAIL=hola@schoolbite.app
+MONTHLY_PRICE=₡39.900
+```
+
+El script usa Flutter `3.32.7`, habilita Web, instala dependencias y pasa
+`PARENT_DEMO_URL` / `ADMIN_DEMO_URL` como `--dart-define`.

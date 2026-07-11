@@ -8,6 +8,7 @@ void main() {
 
     expect(find.text('SchoolBite'), findsWidgets);
     expect(find.text('Olvidese de los pedidos por WhatsApp.'), findsOneWidget);
-    expect(find.text('Probar Demo'), findsOneWidget);
+    expect(find.text('Probar demo para padres'), findsOneWidget);
+    expect(find.text('Probar panel de soda'), findsOneWidget);
   });
 }

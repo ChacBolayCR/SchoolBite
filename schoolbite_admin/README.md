@@ -107,14 +107,23 @@ flutter build web --release
 
 ## Vercel
 
-Build command:
+Root Directory:
 
-```bash
-flutter build web --release
+```text
+schoolbite_admin
 ```
 
-Output directory:
+Build Command:
+
+```bash
+bash vercel_build.sh
+```
+
+Output Directory:
 
 ```bash
 build/web
 ```
+
+El script `vercel_build.sh` descarga Flutter `3.32.7` en cache de Vercel,
+habilita Web, ejecuta `flutter pub get` y genera `build/web`.
