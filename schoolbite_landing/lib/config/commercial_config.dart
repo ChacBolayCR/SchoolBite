@@ -3,12 +3,12 @@ class CommercialConfig {
 
   static const parentDemoUrl = String.fromEnvironment(
     'PARENT_DEMO_URL',
-    defaultValue: 'http://127.0.0.1:8102',
+    defaultValue: 'https://schoolbite-parent.vercel.app/',
   );
 
   static const adminDemoUrl = String.fromEnvironment(
     'ADMIN_DEMO_URL',
-    defaultValue: 'http://127.0.0.1:8103',
+    defaultValue: 'https://schoolbiteadmin.vercel.app/',
   );
 
   static const contactEmail = String.fromEnvironment(
